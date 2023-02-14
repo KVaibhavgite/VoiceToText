@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_search"
+        android:title="search"
+        android:icon="@drawable/ic_baseline_search_24"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.widget.SearchView"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/item01"
+        android:title="Add Product"
+        tools:ignore="HardcodedText" />
+    <item
+        android:id="@+id/item02"
+        android:title="About"
+        tools:ignore="HardcodedText" />
+    <item
+        android:id="@+id/item03"
+        android:title="Exit"
+        tools:ignore="HardcodedText" />
+
+
+</menu>
