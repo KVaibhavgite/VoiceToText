@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>{
     private Context context;
     private MainActivity mainActivity;
-    private ArrayList product_id, name_Product, price_Product;// quantity_Product;
+    private ArrayList product_id, name_Product, price_Product,quantity_Product;
 
     public CustomAdapter(Context context, MainActivity mainActivity, ArrayList product_id, ArrayList name_Product, ArrayList price_Product) {
         this.context = context;
@@ -30,14 +30,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         this.name_Product = name_Product;
         this.price_Product = price_Product;
     }
-/* public CustomAdapter( MainActivity mainActivity, ArrayList product_id, ArrayList name_Product, ArrayList price_Product, ArrayList quantity_Product) {
-
+ public CustomAdapter(Context context, MainActivity mainActivity, ArrayList product_id, ArrayList name_Product, ArrayList price_Product, ArrayList quantity_Product) {
+     this.context = context;
         this.mainActivity = mainActivity;
         this.product_id = product_id;
         this.name_Product = name_Product;
         this.price_Product = price_Product;
         this.quantity_Product = quantity_Product;
-    }*/
+    }
+
 
 
 
@@ -57,7 +58,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         holder.product_id_txt.setText(String.valueOf(product_id.get(position)));
         holder.name_Product.setText(String.valueOf(name_Product.get(position)));
         holder.price_Product.setText(String.valueOf(price_Product.get(position)));
-        //holder.quantity_Product.setText(String.valueOf(quantity_Product.get(position)));
+        holder.quantity_Product.setText(String.valueOf(quantity_Product.get(position)));
         //Recyclerview onClickListener
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +67,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 intent.putExtra("id", String.valueOf(product_id.get(position)));
                 intent.putExtra("Product Name", String.valueOf(name_Product.get(position)));
                 intent.putExtra("Price", String.valueOf(price_Product.get(position)));
-                // intent.putExtra("Quantity", String.valueOf(quantity_Product.get(position)));
+                intent.putExtra("Quantity", String.valueOf(quantity_Product.get(position)));
                 mainActivity.startActivityForResult(intent, 1);
             }
         });
@@ -81,7 +82,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView product_id_txt, name_Product, price_Product; //quantity_Product;
+        TextView product_id_txt, name_Product, price_Product,quantity_Product;
         LinearLayout mainLayout;
 
         ViewHolder(@NonNull View itemView) {
@@ -89,7 +90,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             product_id_txt = itemView.findViewById(R.id.product_id_txt);
             name_Product = itemView.findViewById(R.id.name_Product_txt);
             price_Product = itemView.findViewById(R.id.price_Product_txt);
-            //quantity_Product = itemView.findViewById(R.id.quantity_Product_txt);
+            quantity_Product = itemView.findViewById(R.id.quantity_Product_txt);
             mainLayout = itemView.findViewById(R.id.mainLayout);
             //Animate Recyclerview
             Animation translate_anim = AnimationUtils.loadAnimation(context, R.anim.translate_anim);

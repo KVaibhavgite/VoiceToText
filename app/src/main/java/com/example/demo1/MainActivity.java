@@ -31,16 +31,18 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     private ImageView iv_mic1;
     private TextView tv_Speech_to_text;
-    private static final int REQUEST_CODE_SPEECH_INPUT = 2;
+    private static final int REQUEST_CODE_SPEECH_INPUT = 0;
 
     String mAnswer = "";
     ArrayList<String> result;
     ArrayAdapter<String> adapter ;
 
+
+
     int num = 0;
     LinkedList<String> ll= new LinkedList<>();
     DBHelper DB;
-    ArrayList<String> product_id, name_Product, price_Product;
+    ArrayList<String> product_id, name_Product, price_Product,quantity_Product;
     CustomAdapter customAdapter;
 
 
@@ -83,11 +85,11 @@ public class MainActivity extends AppCompatActivity {
         product_id = new ArrayList<>();
         name_Product = new ArrayList<>();
         price_Product = new ArrayList<>();
-        //book_pages = new ArrayList<>();
+        quantity_Product = new ArrayList<>();
 
         storeDataInArrays();
 
-        customAdapter = new CustomAdapter(this,MainActivity.this, product_id, name_Product, price_Product);
+        customAdapter = new CustomAdapter(this,MainActivity.this, product_id, name_Product, price_Product,quantity_Product);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 product_id.add(cursor.getString(0));
                 name_Product.add(cursor.getString(1));
                 price_Product.add(cursor.getString(2));
-                //quantity_Product.add(cursor.getString(3));
+                quantity_Product.add(cursor.getString(3));
             }
             // empty_imageview.setVisibility(View.GONE);
             // no_data.setVisibility(View.GONE);
@@ -118,28 +120,70 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
-            if (resultCode == RESULT_OK && data != null) {
-                result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                mAnswer = result.get(0);
-                tv_Speech_to_text.setText(mAnswer);
-                //getListView(result);
+        switch (requestCode){
 
-               // onResultExecute(result.get(0),num);
+            case 0:{
 
+                if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
+                    if (resultCode == RESULT_OK && data != null) {
+                        result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                        mAnswer = result.get(0);
+                        String[] speechWords = mAnswer.split("\\s+");
+
+                        String item = null;
+                        int quantity = 0;
+                        for (String word : speechWords) {
+                            if (word.matches("\\d+")) {
+                                quantity = Integer.parseInt(word);
+                            } else {item = word;}
+                        }
+
+                        if (item != null && quantity > 0 ) {
+                            //onResultExecute(item,quantity,num);*/
+                            insertData(item, quantity);
+                            /*storeDataInArrays();*/
+                        } else {
+                            Toast.makeText(MainActivity.this, "Error: Could not generate invoice", Toast.LENGTH_SHORT).show();
+                            // show an error message or prompt the user to try again
+                        }
+                        tv_Speech_to_text.setText(mAnswer);
+                        //getListView(result);
+                        // onResultExecute(result.get(0),num);
+                    }
+
+                }
 
             }
 
+
+            case 1:{
+
+                if(requestCode == 1){
+                    recreate();
+                }
+
+            }
         }
-       else if(requestCode == 1){
-            recreate();
+
+    }
+
+
+    public void insertData(String item, int quantity) {
+        Boolean checkuserpass1 = DB.checkandupdate(item, quantity);
+        if (checkuserpass1) {
+            Toast.makeText(MainActivity.this, "Updated successful", Toast.LENGTH_SHORT).show();
+
+        } else {
+            Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
    /* protected void onResultExecute(String string,int po){

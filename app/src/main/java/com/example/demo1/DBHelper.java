@@ -20,9 +20,9 @@ class DBHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_NAME = "Productdetail";
     private static final String COLUMN_ID = "_id";
-    private static final String COLUMN_Pro_Nane = "PRODUCT";
+    private static final String COLUMN_Pro_Name = "PRODUCT";
     private static final String COLUMN_Pro_Price = "PRICE";
-   //private static final String COLUMN_Pro_QTY = "QTY";
+   private static final String COLUMN_Pro_QTY = "QTY";
 
     DBHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,10 +32,15 @@ class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase DB) {
         String query = "CREATE TABLE " + TABLE_NAME +
-                " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_Pro_Nane + " TEXT, " +
-                COLUMN_Pro_Price + " INTEGER); " ;
+                " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +
+                COLUMN_Pro_Name + " TEXT  NOT NULL , " +
+                COLUMN_Pro_Price + " INTEGER NOT NULL," +
+                COLUMN_Pro_QTY +  " INTEGER); " ;
         DB.execSQL(query);
+
+
+
+
     }
     @Override
     public void onUpgrade(SQLiteDatabase DB, int i, int i1) {
@@ -46,7 +51,7 @@ class DBHelper extends SQLiteOpenHelper {
     public Boolean insertproductdata(String product, String price) {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_Pro_Nane, product);
+        contentValues.put(COLUMN_Pro_Name, product);
         contentValues.put(COLUMN_Pro_Price, price);
 
         long result = DB.insert(" Productdetail", null, contentValues);
@@ -63,7 +68,7 @@ class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(COLUMN_Pro_Nane, pro_name);
+        cv.put(COLUMN_Pro_Name, pro_name);
         cv.put(COLUMN_Pro_Price, pro_price);
 
         long result = DB.insert(TABLE_NAME,null, cv);
@@ -91,11 +96,11 @@ class DBHelper extends SQLiteOpenHelper {
     void updateData(String row_id, String pro_name, String pro_price){
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_Pro_Nane, pro_name);
+        cv.put(COLUMN_Pro_Name, pro_name);
         cv.put(COLUMN_Pro_Price, pro_price);
 
 
-        long result = DB.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
+        long result = DB.update(TABLE_NAME, cv, "PRODUCT=?", new String[]{COLUMN_Pro_Name});
         if(result == -1){
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
         }else {
@@ -107,7 +112,7 @@ class DBHelper extends SQLiteOpenHelper {
     //delete row
     void deleteOneRow(String row_id){
         SQLiteDatabase DB = this.getWritableDatabase();
-        long result = DB.delete(TABLE_NAME, "_id=?", new String[]{row_id});
+        long result = DB.delete(TABLE_NAME, "PRODUCT=?", new String[]{COLUMN_Pro_Name});
         if(result == -1){
             Toast.makeText(context, "Failed to Delete.", Toast.LENGTH_SHORT).show();
         }else{
@@ -120,6 +125,22 @@ class DBHelper extends SQLiteOpenHelper {
     void deleteAllData(){
         SQLiteDatabase DB = this.getWritableDatabase();
         DB.execSQL("DELETE FROM " + TABLE_NAME);
+    }
+
+
+    public Boolean checkandupdate(String product, Integer quantity1) {
+        if (quantity1 > 0) {
+            SQLiteDatabase DB = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_Pro_QTY, quantity1);
+            DB.update(TABLE_NAME, values, "PRODUCT=?", new String[]{product});
+            DB.close();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 

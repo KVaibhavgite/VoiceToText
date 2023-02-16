@@ -4,12 +4,12 @@ public class User
 {
     private String product;
     private String price;
-    //private String quantity;
+    private Integer quantity;
 
-    public User(String productTXT, String priceTXT){
+    public User(String productTXT, String priceTXT,Integer quantityTXT){
         product = productTXT;
         price = priceTXT;
-        //quantity = quantityTXT;
+        quantity = quantityTXT;
     }
 
     public String getProduct() {
@@ -20,7 +20,5 @@ public class User
         return price;
     }
 
-    /*public String getQuantity() {
-        return quantity;
-    }*/
+    public Integer getQuantity() {return quantity; }
 }

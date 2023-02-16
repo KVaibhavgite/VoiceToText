@@ -33,7 +33,7 @@ public class View_List_Content extends AppCompatActivity {
         else {
 
             while (data.moveToNext()){
-                user = new User(data.getString(1),data.getString(2));
+                user = new User(data.getString(1),data.getString(2),data.getInt(3));
                 userlist.add(user);
             }
             TwoColumn_ListAdapter adapter = new TwoColumn_ListAdapter(this,R.layout.list_adapter_view,userlist);
