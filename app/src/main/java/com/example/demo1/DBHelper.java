@@ -100,7 +100,7 @@ class DBHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_Pro_Price, pro_price);
 
 
-        long result = DB.update(TABLE_NAME, cv, "PRODUCT=?", new String[]{COLUMN_Pro_Name});
+        long result = DB.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
         if(result == -1){
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
         }else {
@@ -112,7 +112,7 @@ class DBHelper extends SQLiteOpenHelper {
     //delete row
     void deleteOneRow(String row_id){
         SQLiteDatabase DB = this.getWritableDatabase();
-        long result = DB.delete(TABLE_NAME, "PRODUCT=?", new String[]{COLUMN_Pro_Name});
+        long result = DB.delete(TABLE_NAME, "_id=?", new String[]{row_id});
         if(result == -1){
             Toast.makeText(context, "Failed to Delete.", Toast.LENGTH_SHORT).show();
         }else{

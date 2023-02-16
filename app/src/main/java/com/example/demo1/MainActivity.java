@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+                recreate();
 
             }
 
